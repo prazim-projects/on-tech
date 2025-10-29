@@ -11,6 +11,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField('Category', related_name='posts')
+    flag = models.CharField(max_length=255, default='flag{exp0sed-4ttr16ut3}')
 
     def __str__(self):
         return self.title

@@ -4,34 +4,51 @@ from graphene_django import DjangoObjectType
 from blog.models import *
 from ctf.models import *
 
-class postType(DjangoObjectType):
+class PostType(DjangoObjectType):
     class Meta:
         model = Post
-        fields = ("title", "content", "created_at")
+        fields = "__all__"
 
-class challengeType(DjangoObjectType):
+
+class CommentType(DjangoObjectType):
+    class Meta:
+        model = Comment
+        fields = ("author", "body", "created_on", "post")
+
+class CategoryType(DjangoObjectType):
+    class Meta:
+        model = Category
+        fields = "__all__"
+
+class ChallengeType(DjangoObjectType):
     class Meta:
         model = Challenge
         fields = ("name", "description", "category", "points", "flag")
 
-class submissionType(DjangoObjectType):
+class SubmissionType(DjangoObjectType):
     class Meta:
         model = Submission
         fields = ("user", "challenge", "submitted_flag", "timestamp", "is_correct")
 
 
 class Query(graphene.ObjectType):
-    allPosts = graphene.List(postType)
-    challenge = graphene.List(challengeType)
+    allPosts = graphene.List(PostType)
+    challenge = graphene.List(ChallengeType)
 
-    def resolve_all_posts(root, info):
-        return Post.objects.select_related("Post").all()
+    def resolve_allPosts(root, info):
+        return Post.objects.all()
     
     def resolve_post_by_title(root, info, title):
         try:
-            return Post.objects.get(title=title)
+            return Post.objects.filter(title=title).first()
         except:
-            return none
+            return None
+    
+    def resolve_comments_by_post(root, info, post_id):
+        return Comment.objects.filter(post__id=post_id)
+    
+    def resolve_comments_by_author(root, info, author):
+        return Comment.objects.filter(author=author)
     
 
 
