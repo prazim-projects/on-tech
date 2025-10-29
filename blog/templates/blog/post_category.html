@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        {% extends 'blog/index.html' %}
+        {% block page_title %}
+            <h2>Posts in Category: {{ category }}</h2>
+        {% endblock page_title %}
+        {% block content %}
+        <h2>Blog Posts</h2>
+        <ul>
+            {% for cate in category %}
+                <li>
+                    <h4>{{ cate.name }}</h3>
+                </li>
+            {% empty %}
+                <li>No posts available.</li>
+            {% endfor %}
+        </ul>
+        {% endblock content %}
+    </body>
+</html>

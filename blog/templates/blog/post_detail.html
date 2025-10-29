@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+    {% extends "blog/index.html" %}
+    {% block page_title %}
+        <h2>{{ post.title }}</h2>
+    {% endblock page_title %}
+
+    {% block blog_content %}
+        <small>
+            {{ post.created_at.date }} | Categories:
+            {% for category in post.categories.all %}
+                <a href="{% url 'post_category' category.name %}">{{ category.name }}</a>
+            {% endfor %}
+
+        </small>
+        <img src="{{post.image.url}}" alt="{{post.title}}" />
+        <p>{{ post.content | linebreaks }}</p>
+
+        <h3> Leave a Comment: </h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <h3>Comments</h3>
+        {% for comment in comments %}
+            <div>
+                <strong>{{ comment.author }}</strong> on {{ comment.created_on.date }} said:
+                <p>{{ comment.body | linebreaks }}</p>
+            </div>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    {% endblock blog_content %}
+
+</body>
+
+</html>
