@@ -4,11 +4,16 @@
     <meta charset="utf-8">
     <title>On Electronics Blog</title>
     <favicon rel="icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simpledotcss/2.3.7/simple-v1.css">
 </head>
 <body>
 <h1>My Personal Blog</h1>
-<a href="{% url "blog_home" %}">Home</a>
+    <nav class="navbar">
+    {% for bar in nav %}
+        <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
+    {% endfor %}
+    </nav>
+    <!-- <a href="{% url "blog_home" %}">Home</a> -->
 <hr>
 {% block page_title %}{% endblock page_title %}
 {% block blog_content %}{% endblock blog_content %}

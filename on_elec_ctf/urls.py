@@ -20,12 +20,17 @@ from django.contrib import admin
 from django.urls import path, include
 from graphene_django.views import GraphQLView
 from .schema import schema
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('blog.urls')),         # Django Template Blog
-    path('api/', include('api.urls')),      # Your Fuzzable REST-like API
-    path('graphql/', GraphQLView.as_view(graphiql=True, schema=schema)), # Your GraphQL API
+    path('', include('blog.urls')),   
+    path('ctf/', include('ctf.urls')),     
+
+    path('graphql/', GraphQLView.as_view(graphiql=False, schema=schema)),
+    path('api/graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
+    # path('graphql/', include('api.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 

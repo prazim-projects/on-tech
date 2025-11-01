@@ -59,6 +59,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+LOGIN_REDIRECT_URL = '/'       # After login, redirect here
+LOGOUT_REDIRECT_URL = '/accounts/login/'  # After logout
+LOGIN_URL = '/accounts/login/' # Required for @login_required decorator
+
+
 ROOT_URLCONF = 'on_elec_ctf.urls'
 
 MEDIA_URL = '/media/'

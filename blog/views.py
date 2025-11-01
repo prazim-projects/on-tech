@@ -5,7 +5,23 @@ from blog.forms import CommentForm
 
 def blog_home(request):
     posts = Post.objects.order_by('-created_at')[:5]
-    context = {'posts': posts}
+    nav = [
+        ["Home", "blog_home"],
+        ["CTF", "challenge_list"],
+    ]
+
+    if request.user.is_authenticated:
+        nav += [
+            ["Dashboard", "dashboard"],
+            ["Logout", "logout"],
+        ]
+    else:
+        nav += [
+            ["Login", "login"],
+            ["Register", "register"],
+        ]
+
+    context = {'posts': posts, 'nav': nav}
     return render(request, 'blog/index.html', context)
 
 

@@ -4,10 +4,11 @@ from graphene_django import DjangoObjectType
 from blog.models import *
 from ctf.models import *
 
-class PostType(DjangoObjectType):
+class blogType(DjangoObjectType):
     class Meta:
         model = Post
-        fields = "__all__"
+        # fields = "__all__"
+        exclude = ("created_at", "last_modified")
 
 
 class CommentType(DjangoObjectType):
@@ -23,7 +24,7 @@ class CategoryType(DjangoObjectType):
 class ChallengeType(DjangoObjectType):
     class Meta:
         model = Challenge
-        fields = ("name", "description", "category", "points", "flag")
+        fields = ('id', "name", "description", "category", "points")
 
 class SubmissionType(DjangoObjectType):
     class Meta:
@@ -32,8 +33,12 @@ class SubmissionType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    allPosts = graphene.List(PostType)
-    challenge = graphene.List(ChallengeType)
+    allPosts = graphene.List(blogType)
+    post_by_title = graphene.Field(blogType, title=graphene.String(required=True))
+    comments = graphene.List(CommentType)
+    comments_by_post = graphene.List(CommentType, post_id=graphene.Int(required=True))
+    comments_by_author = graphene.List(CommentType, author=graphene.String(required=True))
+    categories = graphene.List(CategoryType)
 
     def resolve_allPosts(root, info):
         return Post.objects.all()
@@ -50,6 +55,8 @@ class Query(graphene.ObjectType):
     def resolve_comments_by_author(root, info, author):
         return Comment.objects.filter(author=author)
     
+    def resolve_categories(root, info):
+        return Category.objects.all()
 
 
 schema = graphene.Schema(query=Query)

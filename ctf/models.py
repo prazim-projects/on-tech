@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Challenge(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField()
     category = models.CharField(max_length=100)
@@ -18,7 +19,7 @@ class Submission(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     is_correct = models.BooleanField(default=False)
 
-    class Meta:
+    class Meta: 
         unique_together = ('user', 'challenge') # A user can only solve a challenge once
 
     def __str__(self):

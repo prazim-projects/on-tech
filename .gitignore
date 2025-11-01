@@ -1,4 +1,5 @@
 .env
 .env
 on_elec_ctf/schema.py
-posts/photo_2025-10-26_12-39-56.jpg
+posts/*
+on_elec_ctf/__pycache__/*

@@ -11,12 +11,11 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
     categories = models.ManyToManyField('Category', related_name='posts')
-    flag = models.CharField(max_length=255, default='flag{exp0sed-4ttr16ut3}')
+    flag = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.title
     
-
 class Category(models.Model):
     name = models.CharField(max_length=30)
 
@@ -35,3 +34,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
+    
+class flag(models.Model):
+    post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name='post_flag')
+    flag_1 = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'Flag for {self.post.title}'

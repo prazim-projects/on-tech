@@ -12,3 +12,4 @@ class CommentForm(forms.Form):
         widget=forms.Textarea(
             attrs={"class": "form-control", 'placeholder': 'Your comment here...'})
     )
+
