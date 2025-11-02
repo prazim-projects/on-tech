@@ -13,7 +13,6 @@ def blog_home(request):
     if request.user.is_authenticated:
         nav += [
             ["Dashboard", "dashboard"],
-            ["Logout", "logout"],
         ]
     else:
         nav += [

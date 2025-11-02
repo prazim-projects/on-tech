@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.contrib.auth.decorators import login_required
-from .models import Challenge
+from .models import Challenge, Submission
+from django.http import HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse
 from django.contrib.auth import login
+from .forms import FlagSubmitForm
+from django.contrib import messages
 
 
 
@@ -14,34 +17,65 @@ def dashboard(request):
 
 @login_required
 def challenge_list(request):
-    challenges = Challenge.objects.order_by('name')[:5]
+    challenges = Challenge.objects.order_by('id')[:5]
+    nav = [
+        ["Home", "blog_home"],
+        ["CTF", "challenge_list"],
+    ]
+
+    if request.user.is_authenticated:
+        nav += [
+            ["Dashboard", "dashboard"],
+        ]
+
+    else:
+        nav += [
+            ["Login", "login"],
+            ["Register", "register"],
+        ]
+
     context = {
-        'challenges': challenges,
+        'challenges': challenges, 'nav': nav
     }
     return render(request, 'ctf/challenge_list.html', context)
 
 @login_required
 def challenge_detail(request, pk):
     challenge = Challenge.objects.get(pk=pk)
+    form = FlagSubmitForm(initial={'challenge_id': challenge.id})
+
+    if request.method == 'POST':
+        flagForm = FlagSubmitForm(request.POST)
+        if form.is_valid():
+            submitted_flag = flagForm.cleaned_data['flag'].strip()
+            #has user submitted flag before?
+            submission, created = Submission.objects.get_or_create(
+                user=request.user,
+                challenge=challenge,
+            )
+
+            if submission.is_correct:
+                messages.info(request, "You already solved this challenge!")
+                return HttpResponseRedirect(request.path_info)
+
+            if submitted_flag == challenge.flag:
+                submission.submitted_flag = submitted_flag
+                submission.is_correct = True
+                submission.save()
+                messages.success(request, "Correct flag! Challenge completed.")
+            else:
+                submission.submitted_flag = submitted_flag
+                submission.is_correct = False
+                submission.save()
+                messages.error(request, "Incorrect flag. Try again.")
+            
+            return HttpResponseRedirect(request.path_info)
+        
     context = {
         'challenge': challenge,
+        'form': form,
     }
     return render(request, 'ctf/challenge_detail.html', context)
-
-@login_required
-def submit_flag(request, pk):
-    challenge = Challenge.objects.get(pk=pk)
-    if request.method == 'POST':
-        submitted_flag = request.POST.get('flag')
-        if submitted_flag == challenge.flag:
-            message = "Correct flag! Challenge completed."
-        else:
-            message = "Incorrect flag. Try again."
-    template = loader.get_template('ctf/submit_flag.html')
-    context = {
-        'challenge': challenge,
-    }
-    return render(request, 'ctf/submit_flag.html', context)
 
 
 def register_view(request):

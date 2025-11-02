@@ -3,6 +3,9 @@
     <body>
         {% extends 'blog/index.html' %}
         {% block page_title %}
+            <div style="margin-top: 1.5rem;">
+                <a href="{% url 'blog_home' %}" style="color: #9fc3ff; text-decoration: underline;">← Back to blogs page</a>
+            </div>
             <h2>Posts in Category: {{ category }}</h2>
         {% endblock page_title %}
         {% block content %}

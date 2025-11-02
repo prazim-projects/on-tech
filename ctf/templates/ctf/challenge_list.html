@@ -1,19 +1,39 @@
-{% extends "base.html" %}
+{% extends "ctf/base.html" %}
 {% block page_title %}
     <h2> CTF CHALLENEGES </h2>
 {% endblock page_title %}
 {% block ctf_challenge %}
     {% if challenges %}
-        <ul>
-        {% for challenge in challenges %}
-            <li>
-                <a href="{% url 'ctf_challenge_detail' challenge.pk %}">
-                    {{ challenge.title }}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
+        <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+            {% for challenge in challenges %}
+                <div class="items" style="flex: 1 1 200px; background-color:rgb(29, 46, 82)">
+                    <h2>{{challenge}}</h2>
+
+                    <div class="description">
+                        <p>Description: {{challenge.description}}</p>
+                    </div>
+            
+                    <div>
+                        <p> Title: {{ challenge.name }}</p>
+                    </div>
+
+                    
+                    <div class="weight-points">
+                        <p>Weight: {{challenge.points}}</p>
+                    </div>
+
+                    <div class='buttons'>
+                        <a class='btn' href='{% url "challenge_detail" challenge.id %}'>Go TO flag submission</a>
+                    </div>
+
+                </div>
+
+            {% endfor %}
+        </div>
     {% else %}
         <p>No challenges available.</p>
     {% endif %}
+    <div style="margin-top: 1.5rem;">
+        <a href="{% url 'blog_home' %}" style="color: #9fc3ff; text-decoration: underline;">← Back to blogs page</a>
+    </div>
 {% endblock ctf_challenge %}

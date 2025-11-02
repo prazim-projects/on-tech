@@ -1,1 +1,49 @@
-{{% extends 'ctf/challenge_list.html' %}}
+{% extends "ctf/base.html" %}
+    {% block navbar %}
+        <nav class="navbar">
+            {% for bar in nav %}
+                <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
+            {% endfor %}
+            {% if user.is_authenticated %}
+                {% include "registration/_logout.html" %}
+            {% endif %}
+
+        </nav>
+    {% endblock navbar %}
+
+{% block page_title %}
+    <h2>{{ challenge.name }}</h2>
+{% endblock page_title %}
+
+
+
+{% block ctf_challenge %}
+    <div style="background-color: #1d2e52; padding: 1.5rem; border-radius: 10px; color: #fff;">
+
+        <h3>{{ challenge.name }}</h3>
+        <p><strong>Description:</strong> {{ challenge.description }}</p>
+        <p><strong>Points:</strong> {{ challenge.points }}</p>
+
+        <hr>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="background-color:#233a6d; padding:10px; border-radius:8px; margin-bottom:10px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <h4>Submit your flag</h4>
+        <form method="POST" style="margin-top: 1rem;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" style="background-color: #4e74c2; color: white; border: none; padding: 8px 16px; border-radius: 6px;">Submit</button>
+        </form>
+
+        <div style="margin-top: 1.5rem;">
+            <a href="{% url 'challenge_list' %}" style="color: #9fc3ff; text-decoration: underline;">← Back to all challenges</a>
+        </div>
+
+    </div>
+{% endblock ctf_challenge %}

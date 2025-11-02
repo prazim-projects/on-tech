@@ -21,14 +21,29 @@ from django.urls import path, include
 from graphene_django.views import GraphQLView
 from .schema import schema
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseNotAllowed
+
+@csrf_exempt
+def graphql_message(request):
+    if request.method == "GET":
+        return HttpResponse(
+            "<h2>Welcome to the OG GraphQL API version endpoint Bud</h2>"
+            "<p>You are on the right path??? fuzz some more just for the fun of it</p>",
+            content_type="text/html",
+            status=405
+        )
+    if request.method == "POST":
+        view = csrf_exempt(GraphQLView.as_view(graphiql=False, schema=schema))
+    
+    return view(request)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),   
     path('ctf/', include('ctf.urls')),     
-
-    path('graphql/', GraphQLView.as_view(graphiql=False, schema=schema)),
-    path('api/graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
+    path('graphql/', graphql_message, name='graphql'),
+    path('v2/api/graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
     # path('graphql/', include('api.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

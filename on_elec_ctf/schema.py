@@ -2,7 +2,13 @@ import graphene
 from graphene_django import DjangoObjectType
 
 from blog.models import *
-from ctf.models import *
+
+
+class flagType(DjangoObjectType):
+    class Meta:
+        model = flag
+        fields = ("flag_1",)
+
 
 class blogType(DjangoObjectType):
     class Meta:
@@ -21,15 +27,6 @@ class CategoryType(DjangoObjectType):
         model = Category
         fields = "__all__"
 
-class ChallengeType(DjangoObjectType):
-    class Meta:
-        model = Challenge
-        fields = ('id', "name", "description", "category", "points")
-
-class SubmissionType(DjangoObjectType):
-    class Meta:
-        model = Submission
-        fields = ("user", "challenge", "submitted_flag", "timestamp", "is_correct")
 
 
 class Query(graphene.ObjectType):
@@ -39,6 +36,7 @@ class Query(graphene.ObjectType):
     comments_by_post = graphene.List(CommentType, post_id=graphene.Int(required=True))
     comments_by_author = graphene.List(CommentType, author=graphene.String(required=True))
     categories = graphene.List(CategoryType)
+    flag = graphene.Field(flagType)
 
     def resolve_allPosts(root, info):
         return Post.objects.all()
@@ -58,5 +56,7 @@ class Query(graphene.ObjectType):
     def resolve_categories(root, info):
         return Category.objects.all()
 
-
+    def resolve_flag(root, info):
+        return flag.objects.first()
+    
 schema = graphene.Schema(query=Query)

@@ -36,8 +36,8 @@ class Comment(models.Model):
         return f'Comment by {self.author} on {self.post}'
     
 class flag(models.Model):
-    post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name='post_flag')
+
     flag_1 = models.CharField(max_length=255)
 
     def __str__(self):
-        return f'Flag for {self.post.title}'
+        return f'Schema Introspection I: {self.flag_1}'

@@ -1,8 +1,21 @@
-<h2>Login</h2>
-<form method="post" class="form form-class">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login | Vuln Blog</title>
+  <link rel="icon" href="/static/favicon.ico">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simpledotcss/2.3.7/simple-v1.css">
+</head>
+<body>
+  <main>
+    <h2>Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+    </form>
 
-<p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+    <p>Don't have an account? <a href="{% url 'register' %}">Register</a></p>
+  </main>
+</body>
+</html>
