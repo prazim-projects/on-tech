@@ -7,20 +7,23 @@ def blog_home(request):
     posts = Post.objects.order_by('-created_at')[:5]
     nav = [
         ["Home", "blog_home"],
+    ]
+
+    nav_1 = [
         ["CTF", "challenge_list"],
+
     ]
 
     if request.user.is_authenticated:
-        nav += [
+        nav_1 += [
             ["Dashboard", "dashboard"],
         ]
     else:
-        nav += [
+        nav_1 += [
             ["Login", "login"],
-            ["Register", "register"],
         ]
 
-    context = {'posts': posts, 'nav': nav}
+    context = {'posts': posts, 'nav': nav, 'nav_1': nav_1}
     return render(request, 'blog/index.html', context)
 
 
