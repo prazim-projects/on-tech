@@ -3,10 +3,43 @@ from .models import Post, Comment
 from django.http import HttpResponseRedirect
 from blog.forms import CommentForm
 
+def home(request):
+    buttons = [
+        {'text': 'Our Services', 'url': '#services'},
+        {'text': 'Start CTF', 'url': '#ctf'},
+        {'text': 'Goto Blogs', 'url': '#blogs'},
+    ]
+
+    nav = [
+        ["Home", "home"],
+        ["Blog", "blog_home"],
+    ]
+
+    nav_1 = [
+        ["CTF", "challenge_list"],
+
+    ]
+
+    if request.user.is_authenticated:
+        nav_1 += [
+            ["Dashboard", "dashboard"],
+        ]
+    else:
+        nav_1 += [
+            ["Login", "login"],
+        ]
+
+    latest_posts = Post.objects.order_by('-created_at')[:4] 
+
+    context = {'nav': nav, 'nav_1': nav_1, 'buttons': buttons, 'latest_posts': latest_posts}
+    return render(request, 'home.html', context)
+
+
 def blog_home(request):
     posts = Post.objects.order_by('-created_at')[:5]
     nav = [
-        ["Home", "blog_home"],
+        ["Home", "home"], 
+        ["Blog", "blog_home"],    
     ]
 
     nav_1 = [

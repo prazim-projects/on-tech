@@ -4,3 +4,4 @@ on_elec_ctf/schema.py
 posts/*
 on_elec_ctf/__pycache__/*
 blog/migrations/*
+on_elec_ctf/settings.py

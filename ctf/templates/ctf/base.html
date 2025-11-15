@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simpledotcss/2.3.7/simple-v1.css">
 </head>
 <body>
-<h1>CTF LIST</h1>
-    <nav class="navbar">
-    {% for bar in nav %}
-        <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
-    {% endfor %}
-    {% if user.is_authenticated %}
-        {% include "registration/_logout.html" %}
-    {% endif %}
+    <nav class="navbar " style="justify-content: space-between; display: flex; align-items: center;" >
+        {% for bar in nav %}
+            <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
+        {% endfor %}
+        {% if user.is_authenticated %}
+            {% include "registration/_logout.html" %}
+        {% endif %}
 
     </nav>
 <hr>
