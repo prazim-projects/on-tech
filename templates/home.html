@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+<section style="text-align:center; padding:3rem 1rem; color:#fff;">
+    <h1>On Electronics and Software</h1>
+    <p style="font-size:1.2rem;">Your go to professional electronics repair & software development team.</p>
+
+    {% for button in buttons %}
+        <a href="{{ button.url }}" 
+           style="padding:0.8rem 2rem; margin:0.5rem; background:#ff6600; color:white; border-radius:0.3rem; text-decoration:none;">
+           {{ button.text }}
+        </a>
+    {% endfor %}
+</section>
+
+{% endblock page_title %}
+
+{% block blog_content %}
+
+
+<section id="services" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem; margin:3rem 1rem;">
+    <div style="background:#1e1e2f; padding:1.5rem; border-radius:0.5rem; text-align:center; color:#fff; border:1px solid #333;">
+        <img src="/static/images/smartphone.png" alt="Smartphone Repair" style="width:80px; margin-bottom:1rem;">
+        <h3>Smartphone Repair</h3>
+        <p>Screen replacement, battery replacement, water damage repair.</p>
+    </div>
+    <div style="background:#1e1e2f; padding:1.5rem; border-radius:0.5rem; text-align:center; color:#fff; border:1px solid #333;">
+        <img src="/static/images/laptop.png" alt="Laptop Repair" style="width:80px; margin-bottom:1rem;">
+        <h3>Laptop Repair</h3>
+        <p>Hardware troubleshooting, OS installation, performance upgrades.</p>
+    </div>
+    <div style="background:#1e1e2f; padding:1.5rem; border-radius:0.5rem; text-align:center; color:#fff; border:1px solid #333;">
+        <img src="/static/images/microchip.png" alt="Custom Builds" style="width:80px; margin-bottom:1rem;">
+        <h3>Custom Builds</h3>
+        <p>Assemble computers and electronics tailored to your needs.</p>
+    </div>
+    <div style="background:#1e1e2f; padding:1.5rem; border-radius:0.5rem; text-align:center; color:#fff; border:1px solid #333;">
+        <img src="/static/images/shield.png" alt="CTF Platform" style="width:80px; margin-bottom:1rem;">
+        <h3>CTF Platform</h3>
+        <p>Practice cybersecurity with interactive Capture the Flag challenges.</p>
+    </div>
+</section>
+
+
+<section id="blogs" style="background-color:#121212; color:#fff; padding:4rem 1rem;" >
+    <h2 style="text-align:center; margin-bottom:3rem; color:#ff6600;">Latest Blog Posts</h2>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem;">
+        {% for post in latest_posts %}
+        <article style="background:#1e1e2f; border:1px solid #333; border-radius:0.5rem; overflow:hidden; transition: transform 0.2s;">
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}" 
+                     style="width:100%; height:180px; object-fit:cover;">
+            {% endif %}
+            <div style="padding:1rem;">
+                <h3 style="margin-bottom:0.5rem;">
+                    <a href="{% url 'post_detail' post.id %}" style="color:#fff; text-decoration:none;">
+                        {{ post.title }}
+                    </a>
+                </h3>
+                <p style="font-size:0.85rem; color:#bbb;">{{ post.created_at|date:"F j, Y" }}</p>
+                <p>{{ post.content|truncatewords:20 }}</p>
+                <a href="{% url 'post_detail' post.id %}" 
+                   style="color:#ff6600; text-decoration:none;">Read more</a>
+            </div>
+        </article>
+        {% empty %}
+            <p style="grid-column:1/-1; text-align:center; color:#bbb;">No blog posts yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- CTF Section -->
+<section id="ctf" style="text-align:center; margin:3rem 1rem; padding:2rem; border-top:2px solid #ff6600; border-bottom:2px solid #ff6600; background-color:#1a1a28; color:#fff;">
+    <h2>Join Our CTF Platform</h2>
+    <p>Sharpen your hacking skills, solve real-world challenges, and compete online.</p>
+    <a href="/ctf" style="padding:0.8rem 2rem; background:#ff6600; color:white; border-radius:0.3rem; text-decoration:none;">Start CTF Challenges</a>
+</section>
+
+
+<!-- Contact Section -->
+<section id="contact" style="text-align:center; margin:3rem 1rem; color:#fff;">
+    <h2>Contact Us</h2>
+    <p>Email: support@onelectronics.com | Phone: +251 900 000 000</p>
+    <p>Address: Adama, Ethiopia</p>
+</section>
+
+{% endblock blog_content %}

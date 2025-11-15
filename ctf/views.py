@@ -13,13 +13,22 @@ from django.contrib import messages
 
 
 def dashboard(request):
-    return render(request, "users/dashboard.html")
+    nav = [
+        ['Home', 'home'],
+        ["Blog", "blog_home"],
+        ["CTF", "challenge_list"],
+        ["Dashboard", "dashboard"],
+    ]
+
+    context = { 'nav': nav}
+    return render(request, "users/dashboard.html", context)
 
 @login_required
 def challenge_list(request):
     challenges = Challenge.objects.order_by('id')[:5]
     nav = [
-        ["Home", "blog_home"],
+        ['Home', 'home'],
+        ["Blog", "blog_home"],
         ["CTF", "challenge_list"],
     ]
 

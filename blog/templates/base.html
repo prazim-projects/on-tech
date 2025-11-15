@@ -11,9 +11,6 @@
     {% for bar in nav %}
         <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
     {% endfor %}
-    <!-- {% if user.is_authenticated %}
-        {% include "registration/_logout.html" %}
-    {% endif %} -->
     {% for bar in nav_1 %}
         <a href="{% url bar.1 %}" class="nav-item">{{ bar.0 }}</a>
     {% endfor %}
