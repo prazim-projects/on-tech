@@ -4,20 +4,40 @@
 <section style="max-width: 500px; margin: auto;">
     <h2 style="text-align: center;">Create Your Account</h2>
 
-    <form method="post">
+    <form method="post" id="registerForm">
         {% csrf_token %}
 
-        {{ form.non_field_errors }}
-        {{ form.as_p }}
+        <!-- Non-field errors (e.g. passwords don't match) -->
+        {% if form.non_field_errors %}
+            <div style="background:#ffdddd; padding:1em; border-left:4px solid red; margin-bottom:1em;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
-        <button type="submit" style="width: 100%; margin-top: 1em;">
-            Sign Up
-        </button>
+        <!-- Loop through each field manually -->
+        {% for field in form %}
+            <div style="margin-bottom: 1em;">
+                <label><strong>{{ field.label }}</strong></label>
+                {{ field }}
+
+                <!-- Field-specific errors -->
+                {% if field.errors %}
+                    <ul style="color:red; margin:0.3em 0 0 0;">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <button type="submit" style="width: 100%; margin-top: 1em;">Sign Up</button>
     </form>
 
     <p style="text-align: center; margin-top: 1em;">
-        Already have an account? <a href="{% url 'login' %}">Login</a><br>
-
+        Already have an account? <a href="{% url 'login' %}">Login</a>
     </p>
 </section>
 {% endblock content %}
