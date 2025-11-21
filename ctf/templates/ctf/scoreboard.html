@@ -1,0 +1,71 @@
+{% extends "ctf/base.html" %}
+
+{% block page_title %}
+<h1>CTF Scoreboard</h1>
+{% endblock page_title %}
+
+{% block ctf_challenge %}
+
+<table>
+    
+    <h2>Scoreboard Graph</h2>
+    <canvas id="scoreChart" style="max-width:700px;"></canvas>
+
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Challenges Solved</th>
+            <th>Total Points</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.solves|default:"0" }}</td>
+            <td>{{ user.score|default:"0" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" style="text-align:center;">No submissions yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const usernamesData = {{ usernames|safe }};
+const scoresData = {{ scores|safe }};
+
+const ctx = document.getElementById('scoreChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: usernamesData,
+        datasets: [{
+            label: 'Score',
+            data: scoresData,
+            backgroundColor: 'rgba(255, 102, 0, 0.7)',
+            borderColor: 'rgba(255, 102, 0, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'CTF Scoreboard' }
+        },
+        scales: { y: { beginAtZero: true } }
+    }
+});
+
+</script>
+
+{% endblock ctf_challenge %}

@@ -8,20 +8,47 @@ from django.urls import reverse
 from django.contrib.auth import login
 from .forms import FlagSubmitForm
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.db.models import Sum, Q
+from django.db.models.functions import Coalesce
+import json
 
 
+@login_required
+def scoreboard(request):
+    users = User.objects.annotate(
+        score=Coalesce(Sum('submission__challenge__points', filter=Q(submission__is_correct=True)), 0),
+        solves=Coalesce(Sum(1, filter=Q(submission__is_correct=True)), 0)
+    ).order_by('-score')
 
 
-def dashboard(request):
+    usernames = json.dumps([u.username for u in users])
+    scores = json.dumps([u.score for u in users])
+
+
     nav = [
         ['Home', 'home'],
         ["Blog", "blog_home"],
         ["CTF", "challenge_list"],
-        ["Dashboard", "dashboard"],
     ]
+    
+    if request.user.is_authenticated:
+        nav += [
+            ["Scoreboard", "scoreboard"],
+        ]
 
-    context = { 'nav': nav}
-    return render(request, "users/dashboard.html", context)
+    else:
+        nav += [
+            ["Login", "login"],
+            ["Register", "register"],
+        ]
+
+    context = {
+        "users": users, "usernames": usernames, "scores": scores, 'nav': nav
+    }
+
+    return render(request, 'ctf/scoreboard.html', context)
+
 
 @login_required
 def challenge_list(request):
@@ -34,7 +61,7 @@ def challenge_list(request):
 
     if request.user.is_authenticated:
         nav += [
-            ["Dashboard", "dashboard"],
+            ["Scoreboard", "scoreboard"],
         ]
 
     else:
@@ -55,7 +82,7 @@ def challenge_detail(request, pk):
 
     if request.method == 'POST':
         flagForm = FlagSubmitForm(request.POST)
-        if form.is_valid():
+        if flagForm.is_valid():
             submitted_flag = flagForm.cleaned_data['flag'].strip()
             #has user submitted flag before?
             submission, created = Submission.objects.get_or_create(
@@ -93,7 +120,7 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(reverse("dashboard"))
+            return redirect(reverse("challenge_list"))
     else:
         form = UserCreationForm()
     return render(request, "users/register.html", {"form": form})

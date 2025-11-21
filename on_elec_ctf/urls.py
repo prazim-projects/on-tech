@@ -42,9 +42,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('blog.urls')),   
     path('ctf/', include('ctf.urls')),     
-    path('graphql/', graphql_message, name='graphql'),
+    path('api/', include('api.urls')),
     path('v2/api/graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
-    # path('graphql/', include('api.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
 ]
 

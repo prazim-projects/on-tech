@@ -22,7 +22,7 @@ def home(request):
 
     if request.user.is_authenticated:
         nav_1 += [
-            ["Dashboard", "dashboard"],
+            ["Scoreboard", "scoreboard"],
         ]
     else:
         nav_1 += [
@@ -49,7 +49,7 @@ def blog_home(request):
 
     if request.user.is_authenticated:
         nav_1 += [
-            ["Dashboard", "dashboard"],
+            ["Scoreboard", "scoreboard"],
         ]
     else:
         nav_1 += [

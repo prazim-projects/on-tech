@@ -27,7 +27,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG', cast=bool, default=False)
 
-ALLOWED_HOSTS = ['leab.pythonanywhere.com']
+ALLOWED_HOSTS = ['leab.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'ctf',
     'graphene_django',
+    'api',
 
 ]
 
@@ -98,11 +99,12 @@ WSGI_APPLICATION = 'on_elec_ctf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': env('SQL_NAME'),
         'USER': env('SQL_USER'),
         'PASSWORD': env('SQL_PASSWORD'),
         'HOST': env('SQL_HOST'),
+        'PORT': env('SQL_PORT'),
      }
 
 }
