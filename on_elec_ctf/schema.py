@@ -37,26 +37,33 @@ class Query(graphene.ObjectType):
     comments_by_author = graphene.List(CommentType, author=graphene.String(required=True))
     categories = graphene.List(CategoryType)
     flag = graphene.Field(flagType)
+    post_by_id = graphene.List(blogType, id=graphene.Int(required=True))
 
     def resolve_allPosts(root, info):
         return Post.objects.all()
-    
+
+    def resolve_post_by_id(root, info, id):
+        try:
+            return Post.objects.filter(id=id)
+        except:
+            return None
+
     def resolve_post_by_title(root, info, title):
         try:
             return Post.objects.filter(title=title).first()
         except:
             return None
-    
+
     def resolve_comments_by_post(root, info, post_id):
         return Comment.objects.filter(post__id=post_id)
-    
+
     def resolve_comments_by_author(root, info, author):
         return Comment.objects.filter(author=author)
-    
+
     def resolve_categories(root, info):
         return Category.objects.all()
 
     def resolve_flag(root, info):
         return flag.objects.first()
-    
+
 schema = graphene.Schema(query=Query)

@@ -1,12 +1,12 @@
 from django.http import JsonResponse
-
+from django.conf import settings
 
 def hidden_api_info(request):
     if request.method == 'POST':
         data = {
             "status": "success",
             "message": "Welcome to the hidden API! Are you looking for something?",
-            "secret_value": "csec{discover_more_by_fuzzing}",
+            "secret_value": settings.FLAG_V,
         }
         return JsonResponse(data)
     else:

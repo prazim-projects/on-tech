@@ -29,6 +29,7 @@ DEBUG = env('DEBUG', cast=bool, default=False)
 
 ALLOWED_HOSTS = ['leab.pythonanywhere.com', '127.0.0.1', 'localhost']
 
+FLAG_V = env('FLAG_V')
 
 # Application definition
 
@@ -99,12 +100,11 @@ WSGI_APPLICATION = 'on_elec_ctf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': env('SQL_NAME'),
         'USER': env('SQL_USER'),
         'PASSWORD': env('SQL_PASSWORD'),
         'HOST': env('SQL_HOST'),
-        'PORT': env('SQL_PORT'),
      }
 
 }
